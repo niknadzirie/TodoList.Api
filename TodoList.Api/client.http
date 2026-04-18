@@ -2,7 +2,28 @@
 GET http://localhost:5025/tasks
 
 ###
+GET http://localhost:5025/tasks/019da00a-4050-78ee-be67-c1f215c32f23
+
+###
+GET http://localhost:5025/tasks/123
+
+###
 POST http://localhost:5025/tasks
+Content-Type: application/json
+
+{
+    "title" : "Playing Valorant",
+    "description" : "push rank until abg jamil die",
+    "dateline" : "2023-10-20",
+    "statusid" : 2,
+    "iscompleted"  : false 
+}
+
+###
+DELETE http://localhost:5025/tasks/660e9825-ea58-48ad-a462-d22db2f7f1a4
+
+###
+PUT http://localhost:5025/tasks/0f52130c-cf1f-4d30-ae8c-9fd4b2ee2bb8
 Content-Type: application/json
 
 {

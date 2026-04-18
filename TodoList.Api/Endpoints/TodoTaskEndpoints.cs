@@ -30,6 +30,29 @@ public static class TodoTaskEndpoints
         });
 
         //GET task by Id
+        app.MapGet("/tasks/{id:guid}", async (AppDbcontext context, Guid id) =>
+        {
+            var task = await context.TodoTasks
+            .Include(t => t.Status)
+            .Where(t => t.Id == id)
+            .Select(t => new TodoTaskResponseDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                DateLine = t.DateLine,
+                IsCompleted = t.IsCompleted,
+                StatusName = t.Status.Name
+            })
+            .FirstOrDefaultAsync();
+
+            if (task is null)
+            {
+                return Results.NotFound($"Task with Id {id} not found");
+            }
+
+            return Results.Ok(task);
+        });
 
         //Post task
         app.MapPost("/tasks", async (AppDbcontext context, CreateTodoTaskDto dto) =>
@@ -61,6 +84,62 @@ public static class TodoTaskEndpoints
             .FirstAsync();
 
             return Results.Created($"/tasks/{response.Id}", response);
+        });
+
+        //Delete task by id
+        app.MapDelete("/tasks/{id:guid}", async (AppDbcontext context, Guid id) =>
+        {
+            var task = await context.TodoTasks
+            .Where(t => t.Id == id)
+            .FirstOrDefaultAsync();
+
+            if (task is null)
+            {
+                return Results.NotFound($"Task with Id {id} not found");
+            }
+
+            context.Remove(task);
+            await context.SaveChangesAsync();
+
+            return Results.NoContent();
+        });
+
+        //Update task by id
+        app.MapPut("/tasks/{id:guid}", async (Guid id, AppDbcontext context, UpdateTodoTaskDto dto) =>
+        {
+            var task = await context.TodoTasks
+            .Where(t => t.Id == id)
+            .FirstOrDefaultAsync();
+
+            if (task is null)
+            {
+                return Results.NotFound($"Task with Id {id} not found");
+            }
+
+            task.Title = dto.Title;
+            task.Description = dto.Description;
+            task.DateLine = dto.DateLine;
+            task.StatusId = dto.StatusId;
+            task.IsCompleted = dto.IsCompleted;
+
+            await context.SaveChangesAsync();
+
+            var response = await context.TodoTasks
+            .Include(t => t.Status)
+            .Where(t => t.Id == id)
+            .Select(t => new TodoTaskResponseDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                DateLine = t.DateLine,
+                IsCompleted = t.IsCompleted,
+                StatusName = t.Status.Name
+            })
+            .FirstAsync();
+
+            return Results.Ok(response);
+
         });
     }
 }
