@@ -11,6 +11,10 @@ var app = builder.Build();
 
 app.MigrateDb();
 
-app.MapGet("/", () => "Test Running The Initial Project Creation");
+app.MapGet("/status", async (AppDbcontext context) =>
+{
+    var status = await context.Statuses.Select(s => new {s.Id, s.Name }).ToListAsync();
+    return Results.Ok(status);
+});
 
 app.Run();

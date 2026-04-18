@@ -2,21 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TodoList.Api.Data;
 
 #nullable disable
 
-namespace TodoList.Api.Data.Migrations
+namespace TodoList.Api.Migrations
 {
     [DbContext(typeof(AppDbcontext))]
-    [Migration("20260417141901_InitialCreate")]
-    partial class InitialCreate
+    partial class AppDbcontextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +24,11 @@ namespace TodoList.Api.Data.Migrations
 
             modelBuilder.Entity("TodoList.Api.Models.Status", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -56,8 +55,8 @@ namespace TodoList.Api.Data.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("StatusId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
