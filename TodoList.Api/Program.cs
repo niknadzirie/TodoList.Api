@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TodoList.Api.Data;
+using TodoList.Api.Endpoints;
 using TodoList.Api.Extensions;
 using TodoList.Api.Models;
 
@@ -11,10 +12,7 @@ var app = builder.Build();
 
 app.MigrateDb();
 
-app.MapGet("/status", async (AppDbcontext context) =>
-{
-    var status = await context.Statuses.Select(s => new {s.Id, s.Name }).ToListAsync();
-    return Results.Ok(status);
-});
+app.MapStatusEndpoints();
+app.MapTodoTaskEndpoints();
 
 app.Run();
