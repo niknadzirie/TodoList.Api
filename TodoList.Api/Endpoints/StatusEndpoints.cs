@@ -10,7 +10,16 @@ public static class StatusEndpoints
     {
         app.MapGet("/statuses", async (AppDbcontext context) =>
         {
-            var status = await context.Statuses.Include(s => s.TodoTasks).ToListAsync();
+            var status = await context.Statuses.Include(s => s.TodoTasks)
+            .Select(
+                s => new
+                {
+                    s.Id,
+                    s.Name,
+                    ListTodoTasks = s.TodoTasks.ToList()
+                }
+            )
+            .ToListAsync();
             return Results.Ok(status);
         });
     }

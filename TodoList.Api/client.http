@@ -1,0 +1,14 @@
+###
+GET http://localhost:5025/tasks
+
+###
+POST http://localhost:5025/tasks
+Content-Type: application/json
+
+{
+    "title" : "Playing Valorant",
+    "description" : "push rank until abg jamil die",
+    "dateline" : "2023-10-20",
+    "statusid" : 2,
+    "iscompleted"  : false 
+}
