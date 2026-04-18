@@ -25,9 +25,9 @@ public static class DataExtensions
             {
                 if (!context.Set<Status>().Any())
                 {
-                    var status1 = new Status { Id = Guid.NewGuid(), Name = "To Do" };
-                    var status2 = new Status { Id = Guid.NewGuid(), Name = "In Progress" };
-                    var status3 = new Status { Id = Guid.NewGuid(), Name = "Done" };
+                    var status1 = new Status { Name = "To Do" };
+                    var status2 = new Status { Name = "In Progress" };
+                    var status3 = new Status { Name = "Done" };
 
                     context.Set<Status>().AddRange(status1, status2, status3);
                     context.SaveChanges();
